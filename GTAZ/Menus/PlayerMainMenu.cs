@@ -6,6 +6,9 @@ namespace GTAZ.Menus {
 
     public class PlayerMainMenu : BaseMenu{
 
+		private TickBox tbxToggle1;
+		private TickBox explosionsToggle;
+
         public PlayerMainMenu() {
 
             TitleText = "Grand Theft Zombies";
@@ -23,20 +26,36 @@ namespace GTAZ.Menus {
 
             var divider0 = new Devider("Main Menu");                
 
-            var tbxToggle1 = new TickBox("Toggle GTZ") {
+            tbxToggle1 = new TickBox("Toggle GTZ") {
                 PrefixIcon = new SpriteDefinition("commonmenu", "mp_specitem_heroin"),
                 PrefixIconColor = Color.White,
                 PrefixIconSize = 16,
             };
 
             tbxToggle1.OnPress += (sender, args) => {
-                Main.Toggle();
-                if (Main.IsToggled) {
+                Main.ToggleGtz();
+                if (Main.IsGtzToggled) {
                     UI.Notify("GTZ is now toggled ON");
                 } else {
                     UI.Notify("GTZ is now toggled OFF");
                 }
             };
+
+			explosionsToggle = new TickBox("Toggle Exploding Zombies") {
+				PrefixIcon = new SpriteDefinition("commonmenu", "mp_specitem_heroin"),
+				PrefixIconColor = Color.White,
+				PrefixIconSize = 16
+			};
+
+			explosionsToggle.OnPress += (sender, e) => {
+				Main.ToggleExplosions();
+				if (Main.IsExplosionsToggled)
+				{
+					UI.Notify("Exploding Zombies now toggled ON");
+				} else {
+					UI.Notify("Exploding Zombies now toggled OFF");
+				}
+			};
 
             var btnDeveloper = new Button("Developer");
 
@@ -55,6 +74,7 @@ namespace GTAZ.Menus {
             AddMenuItem(divider0);
 
             AddMenuItem(tbxToggle1);
+			AddMenuItem(explosionsToggle);
             AddMenuItem(btnDeveloper);
 
             AddMenuItem(divider1);
@@ -69,7 +89,17 @@ namespace GTAZ.Menus {
 
             base.Update();
 
-        }
+			if (Main.IsGtzToggled)
+			{
+				tbxToggle1.IsChecked = true;
+			}
+
+			if (Main.IsExplosionsToggled)
+			{
+				explosionsToggle.IsChecked = true;
+			}
+
+		}
 
     }
 
